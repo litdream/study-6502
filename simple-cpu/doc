@@ -1,0 +1,19 @@
+https://www.youtube.com/watch?v=qJgsuQoy9bc&list=PLLwK93hM93Z13TRzPx9JqTIn33feefl37
+
+basic architecture:  http://www.6502.org/users/obelisk/6502/architecture.html
+
+https://github.com/davepoo/6502Emulator
+
+
+memory map: https://sta.c64.org/cbm64mem.html
+reset process:  www.c64-wiki.com/wiki/Reset_(Process)
+
+
+# 1. Emulating a CPU in C++ (6502)
+https://www.youtube.com/watch?v=qJgsuQoy9bc
+
+Page size:  256 byte
+
+First page:  $0000-$00FF:  Zero page
+Second page: $0100-$01FF:   System stack
+
