@@ -57,14 +57,25 @@ struct CPU {
     }
 
     Byte FetchByte( u32& cycles, Mem& memory) {
-        Byte data = memory[PC];
+        Byte rtn = ReadByte(cycles, PC memory);
         PC++;
-        cycles--;
-
-        return data;
+        return rtn;
     }
 
-    static constexpr Byte INS_LDA_IM = 0xA9;
+    Byte ReadByte( u32& cycles, u32 addr, Mem& memory) {
+        Byte data = memory[addr];
+        cycles--;
+        return data;
+    }
+    
+    static constexpr Byte
+    INS_LDA_IM = 0xA9,    // lda, immediate  $A9
+        INS_LDA_ZP = 0xA5;    // lda, zero page, $A5
+
+    void LDASetStatus() {
+        Z = (A == 0);
+        N = (A & 0b10000000) > 0;    // Set if bit 7 of A is set.  (??) why >?
+    }
     
     void Execute( u32 cycles, Mem& memory) {
         while (cycles >0) {
@@ -74,13 +85,17 @@ struct CPU {
             switch (Ins) {
             case INS_LDA_IM:
                 value = FetchByte(cycles, memory);
-                A = value;
-                Z = (A == 0);
-                N = (A & 0b10000000) > 0;    // Set if bit 7 of A is set.  (??) why >?
-
+                A = value;   // Set to A register (Accumulator)
+                LDASetStatus();
+                
                 printf("LDA immediate: %d\n", value);
-                break;
+                 break;
 
+            case INS_LDA_ZP:
+                Byte ZeroPageAddr = FetchByte(cycles, memory);
+                A = ReadByte( cycles, ZeroPageAddr, memory);
+                LDASetStatus();
+                
             default:
                 printf("Instruction not handled %d\n", Ins);
                 throw -1;
@@ -99,7 +114,10 @@ int main()
     // Just testing:  (PC=0xFFFC)
     mem[0xFFFC] = CPU::INS_LDA_IM;
     mem[0xFFFD] = 0x42;    // 66
+    mem[0x0042] = 0x84;    // Wait..  Zero page is always 0.  This guy is confusing!!
+    // Isn't This is "Zero Page, X" : http://www.6502.org/users/obelisk/6502/addressing.html#ZPX
 
+    
     // Execute
     cpu.Execute( 2, mem );
     
