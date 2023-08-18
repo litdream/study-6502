@@ -57,7 +57,7 @@ struct CPU {
     }
 
     Byte FetchByte( u32& cycles, Mem& memory) {
-        Byte rtn = ReadByte(cycles, PC memory);
+        Byte rtn = ReadByte(cycles, PC, memory);
         PC++;
         return rtn;
     }
@@ -81,25 +81,25 @@ struct CPU {
     void Execute( u32 cycles, Mem& memory) {
         while (cycles >0) {
             Byte Ins = FetchByte( cycles, memory );   // next instruction
+
             Byte value;
+            Byte ZeroPageAddr;
             
             switch (Ins) {
             case INS_LDA_IM:
                 value = FetchByte(cycles, memory);
                 A = value;   // Set to A register (Accumulator)
                 LDASetStatus();
-                
-                printf("LDA immediate: %d\n", value);
-                 break;
+                break;
 
             case INS_LDA_ZP:
-                Byte ZeroPageAddr = FetchByte(cycles, memory);
+                ZeroPageAddr = FetchByte(cycles, memory);
                 A = ReadByte( cycles, ZeroPageAddr, memory);
                 LDASetStatus();
                 break;
 
             case INS_LDA_ZPX:
-                Byte ZeroPageAddr = FetchByte(cycles, memory);
+                ZeroPageAddr = FetchByte(cycles, memory);
                 ZeroPageAddr += X;
                 cycles--;
                 A = ReadByte( cycles, ZeroPageAddr, memory);
