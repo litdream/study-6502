@@ -21,6 +21,11 @@ struct Mem {
         // assert:  0 <= Address <= MAX_MEM
         return Data[Address];
     }
+
+    Byte& operator[]( u32 Address ) {
+        // assert:  0 <= Address <= MAX_MEM
+        return Data[Address];
+    }
 };
     
 
@@ -58,11 +63,28 @@ struct CPU {
 
         return data;
     }
+
+    static constexpr Byte INS_LDA_IM = 0xA9;
     
     void Execute( u32 cycles, Mem& memory) {
         while (cycles >0) {
             Byte Ins = FetchByte( cycles, memory );   // next instruction
+            Byte value;
+            
+            switch (Ins) {
+            case INS_LDA_IM:
+                value = FetchByte(cycles, memory);
+                A = value;
+                Z = (A == 0);
+                N = (A & 0b10000000) > 0;    // Set if bit 7 of A is set.  (??) why >?
 
+                printf("LDA immediate: %d\n", value);
+                break;
+
+            default:
+                printf("Instruction not handled %d\n", Ins);
+                throw -1;
+            }
         }
     }
 };
@@ -74,6 +96,11 @@ int main()
     CPU cpu;
     cpu.Reset(mem);
 
+    // Just testing:  (PC=0xFFFC)
+    mem[0xFFFC] = CPU::INS_LDA_IM;
+    mem[0xFFFD] = 0x42;    // 66
+
+    // Execute
     cpu.Execute( 2, mem );
     
     return 0;
