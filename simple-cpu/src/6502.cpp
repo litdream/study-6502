@@ -70,8 +70,9 @@ struct CPU {
     
     static constexpr Byte
     INS_LDA_IM = 0xA9,    // lda, immediate  $A9
-        INS_LDA_ZP = 0xA5;    // lda, zero page, $A5
-
+        INS_LDA_ZP = 0xA5,    // lda, zero page, $A5
+        INS_LDA_ZPX = 0xB5;
+    
     void LDASetStatus() {
         Z = (A == 0);
         N = (A & 0b10000000) > 0;    // Set if bit 7 of A is set.  (??) why >?
@@ -95,6 +96,15 @@ struct CPU {
                 Byte ZeroPageAddr = FetchByte(cycles, memory);
                 A = ReadByte( cycles, ZeroPageAddr, memory);
                 LDASetStatus();
+                break;
+
+            case INS_LDA_ZPX:
+                Byte ZeroPageAddr = FetchByte(cycles, memory);
+                ZeroPageAddr += X;
+                cycles--;
+                A = ReadByte( cycles, ZeroPageAddr, memory);
+                LDASetStatus();
+                break;
                 
             default:
                 printf("Instruction not handled %d\n", Ins);
