@@ -26,6 +26,12 @@ struct Mem {
         // assert:  0 <= Address <= MAX_MEM
         return Data[Address];
     }
+
+    void WriteWord(u32 cycles, Word Value, u32 Address) {
+        Data[Address] = Value & 0xFF;
+        Data[Address +1] = (Value >> 8);
+        cycles -= 2;
+    }
 };
     
 
@@ -61,6 +67,17 @@ struct CPU {
         PC++;
         return rtn;
     }
+    Word FetchWord( u32& cycles, Mem& memory) {
+        Word data = memory[PC];
+        PC++;
+
+        data |= (memory[PC] << 8);   // Be careful about ENDIANESS!!
+        PC++;
+
+        cycles +=2;
+        
+        return data;
+    }
 
     Byte ReadByte( u32& cycles, u32 addr, Mem& memory) {
         Byte data = memory[addr];
@@ -71,7 +88,10 @@ struct CPU {
     static constexpr Byte
     INS_LDA_IM = 0xA9,    // lda, immediate  $A9
         INS_LDA_ZP = 0xA5,    // lda, zero page, $A5
-        INS_LDA_ZPX = 0xB5;
+        INS_LDA_ZPX = 0xB5,
+        INS_JSR = 0x20
+        ;
+    
     
     void LDASetStatus() {
         Z = (A == 0);
@@ -85,6 +105,9 @@ struct CPU {
             Byte value;
             Byte ZeroPageAddr;
             
+            Word wordValue;
+            Word SubAddr;
+            
             switch (Ins) {
             case INS_LDA_IM:
                 value = FetchByte(cycles, memory);
@@ -96,7 +119,7 @@ struct CPU {
                 ZeroPageAddr = FetchByte(cycles, memory);
                 A = ReadByte( cycles, ZeroPageAddr, memory);
                 LDASetStatus();
-                break;
+                 break;
 
             case INS_LDA_ZPX:
                 ZeroPageAddr = FetchByte(cycles, memory);
@@ -104,6 +127,13 @@ struct CPU {
                 cycles--;
                 A = ReadByte( cycles, ZeroPageAddr, memory);
                 LDASetStatus();
+                break;
+
+            case INS_JSR:
+                SubAddr = FetchWord(cycles, memory);
+                memory.WriteWord(cycles, PC-1, SP);
+                PC = SubAddr;
+                cycles--;
                 break;
                 
             default:
@@ -122,14 +152,14 @@ int main()
     cpu.Reset(mem);
 
     // Just testing:  (PC=0xFFFC)
-    mem[0xFFFC] = CPU::INS_LDA_IM;
-    mem[0xFFFD] = 0x42;    // 66
-    mem[0x0042] = 0x84;    // Wait..  Zero page is always 0.  This guy is confusing!!
-    // Isn't This is "Zero Page, X" : http://www.6502.org/users/obelisk/6502/addressing.html#ZPX
-
+    mem[0xFFFC] = CPU::INS_JSR;
+    mem[0xFFFD] = 0x42; 
+    mem[0xFFFE] = 0x42; 
+    mem[0x4242] = CPU::INS_LDA_IM;
+    mem[0x4243] = 0x84;
     
     // Execute
-    cpu.Execute( 2, mem );
+    cpu.Execute( 9, mem );
     
     return 0;
 }
