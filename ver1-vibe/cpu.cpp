@@ -59,6 +59,73 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 4; // 4 cycles
             break;
         }
+        // STA - Store Accumulator
+        // Zero Page: STA $NN (85)
+        case 0x85: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            mem.write(zeroPageAddr, A);
+            currentCycles += 3;
+            break;
+        }
+        // Absolute: STA $NNNN (8D)
+        case 0x8D: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t absoluteAddr = (highByte << 8) | lowByte;
+            mem.write(absoluteAddr, A);
+            currentCycles += 4;
+            break;
+        }
+        // Zero Page, X: STA $NN,X (95)
+        case 0x95: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            uint8_t address = (zeroPageAddr + X) & 0xFF; // Wrap around for zero page
+            mem.write(address, A);
+            currentCycles += 4;
+            break;
+        }
+        // Absolute, X: STA $NNNN,X (9D)
+        case 0x9D: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t baseAddr = (highByte << 8) | lowByte;
+            uint16_t absoluteAddr = baseAddr + X;
+            mem.write(absoluteAddr, A);
+            currentCycles += 5; // Cycles for Absolute,X
+            break;
+        }
+        // Absolute, Y: STA $NNNN,Y (99)
+        case 0x99: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t baseAddr = (highByte << 8) | lowByte;
+            uint16_t absoluteAddr = baseAddr + Y;
+            mem.write(absoluteAddr, A);
+            currentCycles += 5; // Cycles for Absolute,Y
+            break;
+        }
+        // Indirect, X: STA ($NN,X) (81)
+        case 0x81: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            uint8_t indirectAddrBase = (zeroPageAddr + X) & 0xFF; // Wrap around for zero page
+            uint8_t lowByte = mem.read(indirectAddrBase);
+            uint8_t highByte = mem.read((indirectAddrBase + 1) & 0xFF); // Wrap around for zero page
+            uint16_t effectiveAddr = (highByte << 8) | lowByte;
+            mem.write(effectiveAddr, A);
+            currentCycles += 6;
+            break;
+        }
+        // Indirect, Y: STA ($NN),Y (91)
+        case 0x91: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            uint8_t lowByte = mem.read(zeroPageAddr);
+            uint8_t highByte = mem.read((zeroPageAddr + 1) & 0xFF); // Wrap around for zero page
+            uint16_t baseAddr = (highByte << 8) | lowByte;
+            uint16_t effectiveAddr = baseAddr + Y;
+            mem.write(effectiveAddr, A);
+            currentCycles += 6;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error

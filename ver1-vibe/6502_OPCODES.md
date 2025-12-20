@@ -6,7 +6,7 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] LDA (Load Accumulator)
 - [ ] LDX (Load X Register)
 - [ ] LDY (Load Y Register)
-- [ ] STA (Store Accumulator)
+- [x] STA (Store Accumulator)
 - [ ] STX (Store X Register)
 - [ ] STY (Store Y Register)
 
