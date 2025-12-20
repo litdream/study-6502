@@ -21,18 +21,21 @@ void CPU::setZNFlags(uint8_t value) {
 
 void CPU::step() {
     uint8_t opcode = mem.read(PC);
-    PC++;
-    std::cout << "Fetched opcode: 0x" << std::hex << (int)opcode << " at PC: 0x" << std::hex << (int)(PC -1) << std::endl;
+    std::cout << "Fetched opcode: 0x" << std::hex << (int)opcode << " at PC: 0x" << std::hex << (int)PC << std::endl;
     execute(opcode);
 }
 
-void CPU::execute(uint8_t opcode) {
+int CPU::execute(uint8_t opcode) {
+    currentCycles = 0; // Reset cycles for the current instruction
+
+    // Increment PC for the opcode itself
+    PC++;
+
     switch (opcode) {
         // LDA - Load Accumulator
         // Immediate: LDA #$NN (A9)
         case 0xA9: {
-            uint8_t value = mem.read(PC);
-            PC++;
+            uint8_t value = mem.read(PC++); // Read value and then increment PC for the operand
             A = value;
             setZNFlags(A);
             currentCycles += 2; // 2 cycles
@@ -40,8 +43,7 @@ void CPU::execute(uint8_t opcode) {
         }
         // LDA - Zero Page: LDA $NN (A5)
         case 0xA5: {
-            uint8_t zeroPageAddr = mem.read(PC);
-            PC++;
+            uint8_t zeroPageAddr = mem.read(PC++); // Read zero page address and then increment PC for the operand
             A = mem.read(zeroPageAddr);
             setZNFlags(A);
             currentCycles += 3; // 3 cycles
@@ -49,10 +51,8 @@ void CPU::execute(uint8_t opcode) {
         }
         // LDA - Absolute: LDA $NNNN (AD)
         case 0xAD: {
-            uint8_t lowByte = mem.read(PC);
-            PC++;
-            uint8_t highByte = mem.read(PC);
-            PC++;
+            uint8_t lowByte = mem.read(PC++); // Read low byte and then increment PC for the first operand
+            uint8_t highByte = mem.read(PC++); // Read high byte and then increment PC for the second operand
             uint16_t absoluteAddr = (highByte << 8) | lowByte;
             A = mem.read(absoluteAddr);
             setZNFlags(A);
@@ -61,8 +61,10 @@ void CPU::execute(uint8_t opcode) {
         }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
+            currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
             break;
     }
+    return currentCycles;
 }
 
 void CPU::reset() {

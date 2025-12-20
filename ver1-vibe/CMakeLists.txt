@@ -19,13 +19,13 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 # Unit tests for Memory
-add_executable(memory_unit_tests memory_test.cpp memory.cpp cpu.cpp)
+add_executable(memory_unit_tests Testing/memory_test.cpp memory.cpp cpu.cpp)
 target_link_libraries(memory_unit_tests PRIVATE GTest::gtest_main)
-target_include_directories(memory_unit_tests PUBLIC .) # So memory_test.cpp can find memory.hpp
+target_include_directories(memory_unit_tests PUBLIC .)
 add_test(NAME MemoryTests COMMAND memory_unit_tests)
 
 # Unit tests for CPU
-add_executable(cpu_unit_tests cpu_test.cpp cpu.cpp memory.cpp)
+add_executable(cpu_unit_tests Testing/cpu_test.cpp Testing/test_lda.cpp cpu.cpp memory.cpp)
 target_link_libraries(cpu_unit_tests PRIVATE GTest::gtest_main)
 target_include_directories(cpu_unit_tests PUBLIC .)
 add_test(NAME CPUTests COMMAND cpu_unit_tests)

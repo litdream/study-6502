@@ -38,11 +38,12 @@ public:
         }
     }
     bool getFlag(Flag flag) const { return (P & flag) != 0; }
+    void setZNFlags(uint8_t value);
 
     // CPU execution
     void step();
     void reset();
-    void execute(uint8_t opcode);
+    int execute(uint8_t opcode);
 
 private:
     uint32_t currentCycles; // Clock cycles for the current instruction
