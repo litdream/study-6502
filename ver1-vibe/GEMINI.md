@@ -11,17 +11,26 @@ Cycle-accurate 6502 emulation targeting Apple II+ hardware to run `.dsk` files v
 
 ## 🚦 Current Status: [PHASE 1: THE BUS]
 
-### 🔳 Task 1: Apple II Memory Map & Bus
-- [ ] Implement 64KB Address Space.
-- [ ] Map RAM ($0000–$BFFF).
-- [ ] Map I/O Soft Switches ($C000–$C0FF).
-- [ ] Map ROM Space ($D000–$FFFF).
-- [ ] Implement `loadROM()` to mirror the Apple II Monitor ROM into memory.
+### ✅ Task 1: Apple II Memory Map & Bus
+- [x] Implement 64KB Address Space.
+- [x] Map RAM ($0000–$BFFF).
+- [x] Map I/O Soft Switches ($C000–$C0FF).
+- [x] Map ROM Space ($D000–$FFFF).
+- [x] Implement `loadROM()` to mirror the Apple II Monitor ROM into memory.
 
-### 🔳 Task 2: CPU Core (6502)
-- [ ] Define Registers (A, X, Y, PC, S, P).
-- [ ] Implement Status Flag logic (N, V, U, B, D, I, Z, C).
-- [ ] Create `step()` function (Fetch, Decode, Execute).
+### ✅ Task 2: CPU Core (6502)
+- [x] Define Registers (A, X, Y, PC, S, P).
+- [x] Implement Status Flag logic (N, V, U, B, D, I, Z, C).
+- [x] Create `step()` function (Fetch, Decode, Execute).
+
+### 🔳 Task 3: Implement 6502 Opcodes (Load/Store Focus)
+- [ ] Implement Load Accumulator (LDA) opcodes.
+- [ ] Implement Store Accumulator (STA) opcodes.
+- [ ] Implement Load X Register (LDX) opcodes.
+- [ ] Implement Store X Register (STX) opcodes.
+- [ ] Implement Load Y Register (LDY) opcodes.
+- [ ] Implement Store Y Register (STY) opcodes.
+- [ ] Track progress in [6502_OPCODES.md](./6502_OPCODES.md).
 
 ---
 
