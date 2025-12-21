@@ -75,6 +75,6 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] SEI (Set Interrupt Disable)
 
 ## System Functions
-- [ ] BRK (Break)
-- [ ] NOP (No Operation)
-- [ ] RTI (Return from Interrupt)
+- [x] BRK (Break)
+- [x] NOP (No Operation)
+- [x] RTI (Return from Interrupt)
