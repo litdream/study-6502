@@ -378,6 +378,33 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 4;
             break;
         }
+        // EOR - Exclusive OR
+        // Immediate: EOR #$NN (49)
+        case 0x49: {
+            uint8_t value = mem.read(PC++);
+            A ^= value;
+            setZNFlags(A);
+            currentCycles += 2;
+            break;
+        }
+        // Zero Page: EOR $NN (45)
+        case 0x45: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            A ^= mem.read(zeroPageAddr);
+            setZNFlags(A);
+            currentCycles += 3;
+            break;
+        }
+        // Absolute: EOR $NNNN (4D)
+        case 0x4D: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t absoluteAddr = (highByte << 8) | lowByte;
+            A ^= mem.read(absoluteAddr);
+            setZNFlags(A);
+            currentCycles += 4;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error

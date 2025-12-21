@@ -36,7 +36,8 @@ add_executable(cpu_unit_tests Testing/cpu_test.cpp     Testing/test_lda.cpp
     Testing/test_php.cpp
     Testing/test_pla.cpp
     Testing/test_plp.cpp
-    Testing/test_and.cpp cpu.cpp memory.cpp)
+    Testing/test_and.cpp
+    Testing/test_eor.cpp cpu.cpp memory.cpp)
 target_link_libraries(cpu_unit_tests PRIVATE GTest::gtest_main)
 target_include_directories(cpu_unit_tests PUBLIC .)
 add_test(NAME CPUTests COMMAND cpu_unit_tests)
