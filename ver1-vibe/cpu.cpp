@@ -637,6 +637,20 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += cycles;
             break;
         }
+        // DEX - Decrement X Register (CA)
+        case 0xCA: {
+            X--;
+            setZNFlags(X);
+            currentCycles += 2;
+            break;
+        }
+        // DEY - Decrement Y Register (88)
+        case 0x88: {
+            Y--;
+            setZNFlags(Y);
+            currentCycles += 2;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
