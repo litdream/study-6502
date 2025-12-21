@@ -30,11 +30,11 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] ORA (Logical Inclusive OR)
 
 ## Arithmetic
-- [ ] ADC (Add with Carry)
-- [ ] SBC (Subtract with Carry)
-- [ ] CMP (Compare Accumulator)
-- [ ] CPX (Compare X Register)
-- [ ] CPY (Compare Y Register)
+- [x] ADC (Add with Carry)
+- [x] SBC (Subtract with Carry)
+- [x] CMP (Compare Accumulator)
+- [x] CPX (Compare X Register)
+- [x] CPY (Compare Y Register)
 
 ## Increments & Decrements
 - [ ] DEC (Decrement Memory)
