@@ -930,6 +930,27 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 5;
             break;
         }
+        // JSR - Jump to Subroutine
+        case 0x20: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t targetAddr = (highByte << 8) | lowByte;
+            uint16_t returnAddr = PC - 1;
+            pushStack((returnAddr >> 8) & 0xFF); // Push high byte
+            pushStack(returnAddr & 0xFF);       // Push low byte
+            PC = targetAddr;
+            currentCycles += 6;
+            break;
+        }
+        // RTS - Return from Subroutine
+        case 0x60: {
+            uint8_t lowByte = popStack();
+            uint8_t highByte = popStack();
+            uint16_t returnAddr = (highByte << 8) | lowByte;
+            PC = returnAddr + 1;
+            currentCycles += 6;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
