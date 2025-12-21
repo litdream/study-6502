@@ -31,7 +31,7 @@ uint8_t CPU::popStack() {
 
 void CPU::step() {
     uint8_t opcode = mem.read(PC);
-    std::cout << "Fetched opcode: 0x" << std::hex << (int)opcode << " at PC: 0x" << std::hex << (int)PC << std::endl;
+    // std::cout << "Fetched opcode: 0x" << std::hex << (int)opcode << " at PC: 0x" << std::hex << (int)PC << std::endl;
     execute(opcode);
 }
 
@@ -998,8 +998,8 @@ int CPU::execute(uint8_t opcode) {
         }
 
         default:
-            std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
-            currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
+            // std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
+            currentCycles += 2; // Assume 2 cycles for unknown opcode to prevent infinite loop
             break;
     }
     return currentCycles;
@@ -1026,4 +1026,15 @@ void CPU::reset() {
     S = 0xFF; // Stack starts at 0xFF
     P = CPU::I | CPU::U; // P is typically initialized with Interrupt Disable (I) and Unused (U) flags set.
     currentCycles = 0;
+}
+
+void CPU::emulateCycles(uint32_t cycles) {
+    while (cycles > 0) {
+        step();
+        if (cycles < currentCycles) { // Prevent underflow if currentCycles is larger than remaining cycles
+            cycles = 0;
+        } else {
+            cycles -= currentCycles;
+        }
+    }
 }

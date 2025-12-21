@@ -47,10 +47,10 @@ public:
     // CPU execution
     void step();
     void reset();
-        int execute(uint8_t opcode);
-    
-    private:
-        void branchIf(bool condition);
+            int execute(uint8_t opcode);
+            void emulateCycles(uint32_t cycles);
+        
+        private:        void branchIf(bool condition);
         uint32_t currentCycles; // Clock cycles for the current instruction
     };
 

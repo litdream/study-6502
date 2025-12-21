@@ -23,14 +23,45 @@ Cycle-accurate 6502 emulation targeting Apple II+ hardware to run `.dsk` files v
 - [x] Implement Status Flag logic (N, V, U, B, D, I, Z, C).
 - [x] Create `step()` function (Fetch, Decode, Execute).
 
-### ✅ Task 3: Implement 6502 Opcodes (Load/Store Focus)
+### ✅ Task 3: Implement 6502 Opcodes (All Categories)
 - [x] Implement Load Accumulator (LDA) opcodes.
 - [x] Implement Store Accumulator (STA) opcodes.
 - [x] Implement Load X Register (LDX) opcodes.
 - [x] Implement Store X Register (STX) opcodes.
 - [x] Implement Load Y Register (LDY) opcodes.
 - [x] Implement Store Y Register (STY) opcodes.
+- [x] Implement Register Transfer opcodes.
+- [x] Implement Stack Operations opcodes.
+- [x] Implement Logical opcodes.
+- [x] Implement Arithmetic opcodes.
+- [x] Implement Increment & Decrement opcodes.
+- [x] Implement Shift opcodes.
+- [x] Implement Jump & Call opcodes.
+- [x] Implement Branch opcodes.
+- [x] Implement Status Flag Change opcodes.
+- [x] Implement System Functions opcodes.
+- [x] All 6502 opcodes implemented and tested.
 - [x] Track progress in [6502_OPCODES.md](./6502_OPCODES.md).
+
+---
+
+## 🚦 Current Status: [PHASE 2: I/O and Display]
+
+### ✅ Task 1: Keyboard Input
+- [x] Implement memory-mapped keyboard (C000/C010) logic.
+- [x] Integrate SDL2 keyboard event polling.
+- [x] Handle ASCII to Apple II keycode mapping (uppercase, Return key).
+
+### ✅ Task 2: Basic Video Output
+- [x] Initialize SDL2 window and renderer.
+- [x] Integrate SDL_ttf for rendering TrueType fonts.
+- [x] Load `PrintChar21.ttf` for text rendering.
+- [x] Implement basic text screen rendering from Apple II memory ($0400-$07FF).
+- [x] Implement CPU cycle-accurate timing with `emulateCycles`.
+
+### 🔳 Task 3: Accurate Apple II Text Rendering
+- [ ] Implement precise Apple II text screen memory mapping (interleaved memory for horizontal scrolling effects).
+- [ ] Implement full Apple II character set mapping, including inverse and flash.
 
 ---
 
