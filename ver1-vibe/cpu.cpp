@@ -750,6 +750,55 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += cycles;
             break;
         }
+        // LSR - Logical Shift Right
+        case 0x4A: // Accumulator
+        case 0x46: // Zero Page
+        case 0x56: // Zero Page,X
+        case 0x4E: // Absolute
+        case 0x5E: // Absolute,X
+        {
+            uint8_t value;
+            uint16_t addr = 0;
+            uint8_t cycles;
+
+            if (opcode == 0x4A) { // Accumulator
+                value = A;
+                cycles = 2;
+            } else {
+                if (opcode == 0x46) { // Zero Page
+                    addr = mem.read(PC++);
+                    cycles = 5;
+                } else if (opcode == 0x56) { // Zero Page,X
+                    uint8_t zeroPageAddr = mem.read(PC++);
+                    addr = (zeroPageAddr + X) & 0xFF;
+                    cycles = 6;
+                } else if (opcode == 0x4E) { // Absolute
+                    uint8_t lowByte = mem.read(PC++);
+                    uint8_t highByte = mem.read(PC++);
+                    addr = (highByte << 8) | lowByte;
+                    cycles = 6;
+                } else { // 0x5E - Absolute,X
+                    uint8_t lowByte = mem.read(PC++);
+                    uint8_t highByte = mem.read(PC++);
+                    uint16_t baseAddr = (highByte << 8) | lowByte;
+                    addr = baseAddr + X;
+                    cycles = 7;
+                }
+                value = mem.read(addr);
+            }
+
+            if (value & 0x01) setFlag(C); else clearFlag(C);
+            value >>= 1;
+            setZNFlags(value);
+
+            if (opcode == 0x4A) {
+                A = value;
+            } else {
+                mem.write(addr, value);
+            }
+            currentCycles += cycles;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
