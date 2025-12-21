@@ -37,12 +37,12 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] CPY (Compare Y Register)
 
 ## Increments & Decrements
-- [ ] DEC (Decrement Memory)
-- [ ] DEX (Decrement X Register)
-- [ ] DEY (Decrement Y Register)
-- [ ] INC (Increment Memory)
-- [ ] INX (Increment X Register)
-- [ ] INY (Increment Y Register)
+- [x] DEC (Decrement Memory)
+- [x] DEX (Decrement X Register)
+- [x] DEY (Decrement Y Register)
+- [x] INC (Increment Memory)
+- [x] INX (Increment X Register)
+- [x] INY (Increment Y Register)
 
 ## Shifts
 - [ ] ASL (Arithmetic Shift Left)
