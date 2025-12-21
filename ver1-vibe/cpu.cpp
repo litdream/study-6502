@@ -19,6 +19,16 @@ void CPU::setZNFlags(uint8_t value) {
     }
 }
 
+void CPU::pushStack(uint8_t value) {
+    mem.write(0x0100 + S, value);
+    S--;
+}
+
+uint8_t CPU::popStack() {
+    S++;
+    return mem.read(0x0100 + S);
+}
+
 void CPU::step() {
     uint8_t opcode = mem.read(PC);
     std::cout << "Fetched opcode: 0x" << std::hex << (int)opcode << " at PC: 0x" << std::hex << (int)PC << std::endl;
@@ -312,6 +322,14 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 2;
             break;
         }
+
+        // PHA - Push Accumulator (48)
+        case 0x48: {
+            pushStack(A);
+            currentCycles += 3;
+            break;
+        }
+
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error

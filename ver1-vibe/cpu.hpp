@@ -40,6 +40,10 @@ public:
     bool getFlag(Flag flag) const { return (P & flag) != 0; }
     void setZNFlags(uint8_t value);
 
+    // Stack operations
+    void pushStack(uint8_t value);
+    uint8_t popStack();
+
     // CPU execution
     void step();
     void reset();

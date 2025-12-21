@@ -23,14 +23,14 @@ Cycle-accurate 6502 emulation targeting Apple II+ hardware to run `.dsk` files v
 - [x] Implement Status Flag logic (N, V, U, B, D, I, Z, C).
 - [x] Create `step()` function (Fetch, Decode, Execute).
 
-### 🔳 Task 3: Implement 6502 Opcodes (Load/Store Focus)
-- [ ] Implement Load Accumulator (LDA) opcodes.
-- [ ] Implement Store Accumulator (STA) opcodes.
-- [ ] Implement Load X Register (LDX) opcodes.
-- [ ] Implement Store X Register (STX) opcodes.
-- [ ] Implement Load Y Register (LDY) opcodes.
-- [ ] Implement Store Y Register (STY) opcodes.
-- [ ] Track progress in [6502_OPCODES.md](./6502_OPCODES.md).
+### ✅ Task 3: Implement 6502 Opcodes (Load/Store Focus)
+- [x] Implement Load Accumulator (LDA) opcodes.
+- [x] Implement Store Accumulator (STA) opcodes.
+- [x] Implement Load X Register (LDX) opcodes.
+- [x] Implement Store X Register (STX) opcodes.
+- [x] Implement Load Y Register (LDY) opcodes.
+- [x] Implement Store Y Register (STY) opcodes.
+- [x] Track progress in [6502_OPCODES.md](./6502_OPCODES.md).
 
 ---
 
