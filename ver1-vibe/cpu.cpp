@@ -901,6 +901,35 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += cycles;
             break;
         }
+        // JMP - Jump
+        case 0x4C: // Absolute
+        {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            PC = (highByte << 8) | lowByte;
+            currentCycles += 3;
+            break;
+        }
+        case 0x6C: // Indirect
+        {
+            uint8_t lowBytePtr = mem.read(PC++);
+            uint8_t highBytePtr = mem.read(PC++);
+            uint16_t ptr = (highBytePtr << 8) | lowBytePtr;
+
+            uint8_t lowByte = mem.read(ptr);
+            uint8_t highByte;
+
+            // Emulate the 6502 bug where the high byte of the address is not read from the next page
+            if ((ptr & 0x00FF) == 0x00FF) {
+                highByte = mem.read(ptr & 0xFF00);
+            } else {
+                highByte = mem.read(ptr + 1);
+            }
+            
+            PC = (highByte << 8) | lowByte;
+            currentCycles += 5;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
