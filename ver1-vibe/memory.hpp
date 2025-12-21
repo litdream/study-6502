@@ -23,6 +23,7 @@ public:
     uint8_t read(uint16_t address);
     void write(uint16_t address, uint8_t value);
     bool loadROM(const std::string& filename, uint16_t start_address);
+    void keyPress(uint8_t key);
 };
 
 #endif // RAY_MEMORY_HPP

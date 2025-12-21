@@ -4,9 +4,14 @@ project(AppleIIEmulator CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Find and link SDL2
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+
 # Main application
 add_executable(apple_emulator main.cpp memory.cpp cpu.cpp)
 target_include_directories(apple_emulator PUBLIC .)
+target_link_libraries(apple_emulator PRIVATE ${SDL2_LIBRARIES})
 
 # Google Test with FetchContent
 include(FetchContent)

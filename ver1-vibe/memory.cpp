@@ -10,34 +10,47 @@ Memory::Memory() : data(ADDRESS_SPACE_SIZE) {
 }
 
 uint8_t Memory::read(uint16_t address) {
+    // Keyboard controller
+    if (address == 0xC000) {
+        // Clear keyboard strobe when KBD is read
+        data[0xC010] &= 0x7F;
+        return data[0xC000];
+    }
+
     if (address >= RAM_START && address <= RAM_END) {
         // RAM access
         return data[address];
     } else if (address >= IO_START && address <= IO_END) {
         // I/O Soft Switches access (future implementation)
         // For now, just return data from the corresponding memory location
-        std::cout << "Reading from I/O address: 0x" << std::hex << address << std::endl;
+        // std::cout << "Reading from I/O address: 0x" << std::hex << address << std::endl;
         return data[address];
     } else if (address >= ROM_START && address <= ROM_END) {
         // ROM access (future implementation)
         // For now, just return data from the corresponding memory location
-        std::cout << "Reading from ROM address: 0x" << std::hex << address << std::endl;
+        // std::cout << "Reading from ROM address: 0x" << std::hex << address << std::endl;
         return data[address];
     }
     return 0; // Should not happen with a 64KB address space
 }
 
 void Memory::write(uint16_t address, uint8_t value) {
+    // Keyboard strobe clear
+    if (address == 0xC010) {
+        data[0xC010] &= 0x7F;
+        return;
+    }
+
     if (address >= RAM_START && address <= RAM_END) {
         // RAM access
         data[address] = value;
     } else if (address >= IO_START && address <= IO_END) {
         // I/O Soft Switches access (future implementation)
-        std::cout << "Writing to I/O address: 0x" << std::hex << address << " value: 0x" << std::hex << (int)value << std::endl;
+        // std::cout << "Writing to I/O address: 0x" << std::hex << address << " value: 0x" << std::hex << (int)value << std::endl;
         data[address] = value; // For now, write to corresponding memory location
     } else if (address >= ROM_START && address <= ROM_END) {
         // ROM access (ROM is usually read-only, but for now, allow writes for testing)
-        std::cout << "Writing to ROM address: 0x" << std::hex << address << " value: 0x" << std::hex << (int)value << std::endl;
+        // std::cout << "Writing to ROM address: 0x" << std::hex << address << " value: 0x" << std::hex << (int)value << std::endl;
         data[address] = value; // For now, write to corresponding memory location
     }
 }
@@ -58,4 +71,10 @@ bool Memory::loadROM(const std::string& filename, uint16_t start_address) {
     file.close();
     std::cout << "Successfully loaded ROM from " << filename << " to 0x" << std::hex << start_address << std::endl;
     return true;
+}
+
+void Memory::keyPress(uint8_t key) {
+    // Apple II ROM expects the high bit of the ASCII code to be set
+    data[0xC000] = key | 0x80;
+    data[0xC010] |= 0x80; // Set keyboard strobe
 }
