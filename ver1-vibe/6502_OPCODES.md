@@ -25,9 +25,9 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] PLP (Pull Processor Status)
 
 ## Logical
-- [ ] AND (Logical AND)
-- [ ] EOR (Exclusive OR)
-- [ ] ORA (Logical Inclusive OR)
+- [x] AND (Logical AND)
+- [x] EOR (Exclusive OR)
+- [x] ORA (Logical Inclusive OR)
 
 ## Arithmetic
 - [ ] ADC (Add with Carry)
