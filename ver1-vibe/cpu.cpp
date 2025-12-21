@@ -323,14 +323,39 @@ int CPU::execute(uint8_t opcode) {
             break;
         }
 
-        // PHA - Push Accumulator (48)
-        case 0x48: {
-            pushStack(A);
-            currentCycles += 3;
-            break;
-        }
+                // PHA - Push Accumulator (48)
 
-        default:
+                case 0x48: {
+
+                    pushStack(A);
+
+                    currentCycles += 3;
+
+                    break;
+
+                }
+
+        
+
+                // PHP - Push Processor Status (08)
+
+                case 0x08: {
+
+                    // Set B and U flags to 1 before pushing, as per 6502 behavior
+
+                    uint8_t status = P | CPU::B | CPU::U;
+
+                    pushStack(status);
+
+                    currentCycles += 3;
+
+                    break;
+
+                }
+
+        
+
+                default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
             break;
