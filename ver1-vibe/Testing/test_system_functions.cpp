@@ -56,3 +56,22 @@ TEST_F(SystemFunctionsTest, BRK) {
     EXPECT_EQ(mem.read(0x01FD), initialP | CPU::B | CPU::U); // Status
     EXPECT_EQ(cycles, 7);
 }
+
+TEST_F(SystemFunctionsTest, RTI) {
+    uint8_t status_on_stack = 0b10101010;
+    cpu.S = 0xFC;
+    mem.write(0x01FF, 0x12); // PC high
+    mem.write(0x01FE, 0x34); // PC low
+    mem.write(0x01FD, status_on_stack);
+
+    mem.write(0x0000, 0x40); // RTI
+    cpu.PC = 0x0000;
+    
+    int cycles = cpu.execute(0x40);
+
+    EXPECT_EQ(cpu.PC, 0x1234);
+    EXPECT_EQ(cpu.S, 0xFF);
+    uint8_t expected_p = (status_on_stack & ~CPU::B & ~CPU::U) | (cpu.P & (CPU::B | CPU::U));
+    EXPECT_EQ(cpu.P, expected_p);
+    EXPECT_EQ(cycles, 6);
+}

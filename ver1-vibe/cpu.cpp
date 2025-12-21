@@ -986,6 +986,16 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 7;
             break;
         }
+        case 0x40: { // RTI
+            uint8_t pulled_status = popStack();
+            P = (pulled_status & ~CPU::B & ~CPU::U) | (P & (CPU::B | CPU::U));
+            
+            uint8_t lowByte = popStack();
+            uint8_t highByte = popStack();
+            PC = (highByte << 8) | lowByte;
+            currentCycles += 6;
+            break;
+        }
 
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
