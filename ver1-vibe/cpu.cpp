@@ -549,6 +549,58 @@ int CPU::execute(uint8_t opcode) {
             setZNFlags(result);
             break;
         }
+        // CPX - Compare X Register
+        case 0xE0: // Immediate
+        case 0xE4: // Zero Page
+        case 0xEC: // Absolute
+        {
+            uint8_t value;
+            if (opcode == 0xE0) {
+                value = mem.read(PC++);
+                currentCycles += 2;
+            } else if (opcode == 0xE4) {
+                uint8_t zeroPageAddr = mem.read(PC++);
+                value = mem.read(zeroPageAddr);
+                currentCycles += 3;
+            } else { // 0xEC
+                uint8_t lowByte = mem.read(PC++);
+                uint8_t highByte = mem.read(PC++);
+                uint16_t absoluteAddr = (highByte << 8) | lowByte;
+                value = mem.read(absoluteAddr);
+                currentCycles += 4;
+            }
+
+            uint8_t result = X - value;
+            if (X >= value) setFlag(C); else clearFlag(C);
+            setZNFlags(result);
+            break;
+        }
+        // CPY - Compare Y Register
+        case 0xC0: // Immediate
+        case 0xC4: // Zero Page
+        case 0xCC: // Absolute
+        {
+            uint8_t value;
+            if (opcode == 0xC0) {
+                value = mem.read(PC++);
+                currentCycles += 2;
+            } else if (opcode == 0xC4) {
+                uint8_t zeroPageAddr = mem.read(PC++);
+                value = mem.read(zeroPageAddr);
+                currentCycles += 3;
+            } else { // 0xCC
+                uint8_t lowByte = mem.read(PC++);
+                uint8_t highByte = mem.read(PC++);
+                uint16_t absoluteAddr = (highByte << 8) | lowByte;
+                value = mem.read(absoluteAddr);
+                currentCycles += 4;
+            }
+
+            uint8_t result = Y - value;
+            if (Y >= value) setFlag(C); else clearFlag(C);
+            setZNFlags(result);
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
