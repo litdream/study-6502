@@ -173,6 +173,78 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 4; // Add 1 if page crossed, not handled yet
             break;
         }
+        // LDY - Load Y Register
+        // Immediate: LDY #$NN (A0)
+        case 0xA0: {
+            uint8_t value = mem.read(PC++);
+            Y = value;
+            setZNFlags(Y);
+            currentCycles += 2;
+            break;
+        }
+        // Zero Page: LDY $NN (A4)
+        case 0xA4: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            Y = mem.read(zeroPageAddr);
+            setZNFlags(Y);
+            currentCycles += 3;
+            break;
+        }
+        // Absolute: LDY $NNNN (AC)
+        case 0xAC: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t absoluteAddr = (highByte << 8) | lowByte;
+            Y = mem.read(absoluteAddr);
+            setZNFlags(Y);
+            currentCycles += 4;
+            break;
+        }
+        // Zero Page, X: LDY $NN,X (B4)
+        case 0xB4: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            uint8_t address = (zeroPageAddr + X) & 0xFF; // Wrap around for zero page
+            Y = mem.read(address);
+            setZNFlags(Y);
+            currentCycles += 4;
+            break;
+        }
+        // Absolute, X: LDY $NNNN,X (BC)
+        case 0xBC: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t baseAddr = (highByte << 8) | lowByte;
+            uint16_t absoluteAddr = baseAddr + X;
+            Y = mem.read(absoluteAddr);
+            setZNFlags(Y);
+            currentCycles += 4; // Add 1 if page crossed, not handled yet
+            break;
+        }
+        // STX - Store X Register
+        // Zero Page: STX $NN (86)
+        case 0x86: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            mem.write(zeroPageAddr, X);
+            currentCycles += 3;
+            break;
+        }
+        // Absolute: STX $NNNN (8E)
+        case 0x8E: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t absoluteAddr = (highByte << 8) | lowByte;
+            mem.write(absoluteAddr, X);
+            currentCycles += 4;
+            break;
+        }
+        // Zero Page, Y: STX $NN,Y (96)
+        case 0x96: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            uint8_t address = (zeroPageAddr + Y) & 0xFF; // Wrap around for zero page
+            mem.write(address, X);
+            currentCycles += 4;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error

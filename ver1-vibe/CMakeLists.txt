@@ -25,7 +25,7 @@ target_include_directories(memory_unit_tests PUBLIC .)
 add_test(NAME MemoryTests COMMAND memory_unit_tests)
 
 # Unit tests for CPU
-add_executable(cpu_unit_tests Testing/cpu_test.cpp Testing/test_lda.cpp Testing/test_sta.cpp Testing/test_ldx.cpp cpu.cpp memory.cpp)
+add_executable(cpu_unit_tests Testing/cpu_test.cpp Testing/test_lda.cpp Testing/test_sta.cpp Testing/test_ldx.cpp Testing/test_ldy.cpp Testing/test_stx.cpp cpu.cpp memory.cpp)
 target_link_libraries(cpu_unit_tests PRIVATE GTest::gtest_main)
 target_include_directories(cpu_unit_tests PUBLIC .)
 add_test(NAME CPUTests COMMAND cpu_unit_tests)
