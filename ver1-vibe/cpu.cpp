@@ -432,6 +432,48 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 4;
             break;
         }
+        // ADC - Add with Carry
+        case 0x69: // Immediate
+        case 0x65: // Zero Page
+        case 0x6D: // Absolute
+        {
+            uint8_t value;
+            if (opcode == 0x69) {
+                value = mem.read(PC++);
+                currentCycles += 2;
+            } else if (opcode == 0x65) {
+                uint8_t zeroPageAddr = mem.read(PC++);
+                value = mem.read(zeroPageAddr);
+                currentCycles += 3;
+            } else { // 0x6D
+                uint8_t lowByte = mem.read(PC++);
+                uint8_t highByte = mem.read(PC++);
+                uint16_t absoluteAddr = (highByte << 8) | lowByte;
+                value = mem.read(absoluteAddr);
+                currentCycles += 4;
+            }
+
+            uint16_t sum = A + value + (getFlag(C) ? 1 : 0);
+            
+            // Set Carry flag
+            if (sum > 0xFF) {
+                setFlag(C);
+            } else {
+                clearFlag(C);
+            }
+
+            // Set Overflow flag
+            // Overflow occurs if the sign of the result is different from the sign of both operands
+            if ((~(A ^ value) & (A ^ sum)) & 0x80) {
+                setFlag(V);
+            } else {
+                clearFlag(V);
+            }
+            
+            A = sum & 0xFF;
+            setZNFlags(A);
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
