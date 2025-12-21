@@ -405,6 +405,33 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 4;
             break;
         }
+        // ORA - Logical Inclusive OR
+        // Immediate: ORA #$NN (09)
+        case 0x09: {
+            uint8_t value = mem.read(PC++);
+            A |= value;
+            setZNFlags(A);
+            currentCycles += 2;
+            break;
+        }
+        // Zero Page: ORA $NN (05)
+        case 0x05: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            A |= mem.read(zeroPageAddr);
+            setZNFlags(A);
+            currentCycles += 3;
+            break;
+        }
+        // Absolute: ORA $NNNN (0D)
+        case 0x0D: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t absoluteAddr = (highByte << 8) | lowByte;
+            A |= mem.read(absoluteAddr);
+            setZNFlags(A);
+            currentCycles += 4;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
