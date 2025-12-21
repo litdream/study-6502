@@ -45,10 +45,10 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] INY (Increment Y Register)
 
 ## Shifts
-- [ ] ASL (Arithmetic Shift Left)
-- [ ] LSR (Logical Shift Right)
-- [ ] ROL (Rotate Left)
-- [ ] ROR (Rotate Right)
+- [x] ASL (Arithmetic Shift Left)
+- [x] LSR (Logical Shift Right)
+- [x] ROL (Rotate Left)
+- [x] ROR (Rotate Right)
 
 ## Jumps & Calls
 - [ ] JMP (Jump)
