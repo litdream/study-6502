@@ -972,6 +972,20 @@ int CPU::execute(uint8_t opcode) {
 
         // System Functions
         case 0xEA: currentCycles += 2; break; // NOP
+        case 0x00: { // BRK
+            PC++; // BRK is a 2 byte instruction, but we already incremented PC by 1
+            pushStack((PC >> 8) & 0xFF);
+            pushStack(PC & 0xFF);
+            uint8_t status = P | CPU::B | CPU::U;
+            pushStack(status);
+            setFlag(I);
+            
+            uint8_t lowByte = mem.read(0xFFFE);
+            uint8_t highByte = mem.read(0xFFFF);
+            PC = (highByte << 8) | lowByte;
+            currentCycles += 7;
+            break;
+        }
 
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
