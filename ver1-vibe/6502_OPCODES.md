@@ -56,14 +56,14 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] RTS (Return from Subroutine)
 
 ## Branches
-- [ ] BCC (Branch if Carry Clear)
-- [ ] BCS (Branch if Carry Set)
-- [ ] BEQ (Branch if Equal)
-- [ ] BMI (Branch if Minus)
-- [ ] BNE (Branch if Not Equal)
-- [ ] BPL (Branch if Plus)
-- [ ] BVC (Branch if Overflow Clear)
-- [ ] BVS (Branch if Overflow Set)
+- [x] BCC (Branch if Carry Clear)
+- [x] BCS (Branch if Carry Set)
+- [x] BEQ (Branch if Equal)
+- [x] BMI (Branch if Minus)
+- [x] BNE (Branch if Not Equal)
+- [x] BPL (Branch if Plus)
+- [x] BVC (Branch if Overflow Clear)
+- [x] BVS (Branch if Overflow Set)
 
 ## Status Flag Changes
 - [ ] CLC (Clear Carry)
