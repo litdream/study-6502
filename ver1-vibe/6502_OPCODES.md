@@ -51,9 +51,9 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] ROR (Rotate Right)
 
 ## Jumps & Calls
-- [ ] JMP (Jump)
-- [ ] JSR (Jump to Subroutine)
-- [ ] RTS (Return from Subroutine)
+- [x] JMP (Jump)
+- [x] JSR (Jump to Subroutine)
+- [x] RTS (Return from Subroutine)
 
 ## Branches
 - [ ] BCC (Branch if Carry Clear)
