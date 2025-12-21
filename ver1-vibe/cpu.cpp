@@ -322,90 +322,36 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 2;
             break;
         }
-
-                // PHA - Push Accumulator (48)
-
-                case 0x48: {
-
-                    pushStack(A);
-
-                    currentCycles += 3;
-
-                    break;
-
-                }
-
-        
-
-                        // PHP - Push Processor Status (08)
-
-        
-
-                        case 0x08: {
-
-        
-
-                            // Set B and U flags to 1 before pushing, as per 6502 behavior
-
-        
-
-                            uint8_t status = P | CPU::B | CPU::U;
-
-        
-
-                            pushStack(status);
-
-        
-
-                            currentCycles += 3;
-
-        
-
-                            break;
-
-        
-
-                        }
-
-        
-
-                
-
-        
-
-                        // PLA - Pull Accumulator (68)
-
-        
-
-                        case 0x68: {
-
-        
-
-                            A = popStack();
-
-        
-
-                            setZNFlags(A);
-
-        
-
-                            currentCycles += 4;
-
-        
-
-                            break;
-
-        
-
-                        }
-
-        
-
-                
-
-        
-
-                        default:
+        // PHA - Push Accumulator (48)
+        case 0x48: {
+            pushStack(A);
+            currentCycles += 3;
+            break;
+        }
+        // PHP - Push Processor Status (08)
+        case 0x08: {
+            // Set B and U flags to 1 before pushing, as per 6502 behavior
+            uint8_t status = P | CPU::B | CPU::U;
+            pushStack(status);
+            currentCycles += 3;
+            break;
+        }
+        // PLA - Pull Accumulator (68)
+        case 0x68: {
+            A = popStack();
+            setZNFlags(A);
+            currentCycles += 4;
+            break;
+        }
+        // PLP - Pull Processor Status (28)
+        case 0x28: {
+            uint8_t pulled_status = popStack();
+            // The B and U flags are not affected by a PLP instruction.
+            P = (pulled_status & ~CPU::B & ~CPU::U) | (P & (CPU::B | CPU::U));
+            currentCycles += 4;
+            break;
+        }
+        default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
             break;
