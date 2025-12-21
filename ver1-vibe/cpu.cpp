@@ -850,6 +850,57 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += cycles;
             break;
         }
+        // ROR - Rotate Right
+        case 0x6A: // Accumulator
+        case 0x66: // Zero Page
+        case 0x76: // Zero Page,X
+        case 0x6E: // Absolute
+        case 0x7E: // Absolute,X
+        {
+            uint8_t value;
+            uint16_t addr = 0;
+            uint8_t cycles;
+
+            if (opcode == 0x6A) { // Accumulator
+                value = A;
+                cycles = 2;
+            } else {
+                if (opcode == 0x66) { // Zero Page
+                    addr = mem.read(PC++);
+                    cycles = 5;
+                } else if (opcode == 0x76) { // Zero Page,X
+                    uint8_t zeroPageAddr = mem.read(PC++);
+                    addr = (zeroPageAddr + X) & 0xFF;
+                    cycles = 6;
+                } else if (opcode == 0x6E) { // Absolute
+                    uint8_t lowByte = mem.read(PC++);
+                    uint8_t highByte = mem.read(PC++);
+                    addr = (highByte << 8) | lowByte;
+                    cycles = 6;
+                } else { // 0x7E - Absolute,X
+                    uint8_t lowByte = mem.read(PC++);
+                    uint8_t highByte = mem.read(PC++);
+                    uint16_t baseAddr = (highByte << 8) | lowByte;
+                    addr = baseAddr + X;
+                    cycles = 7;
+                }
+                value = mem.read(addr);
+            }
+
+            uint8_t old_carry = getFlag(C) ? 0x80 : 0x00;
+            if (value & 0x01) setFlag(C); else clearFlag(C);
+            value >>= 1;
+            value |= old_carry;
+            setZNFlags(value);
+
+            if (opcode == 0x6A) {
+                A = value;
+            } else {
+                mem.write(addr, value);
+            }
+            currentCycles += cycles;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
