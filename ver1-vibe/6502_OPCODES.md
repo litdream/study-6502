@@ -7,8 +7,8 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] LDX (Load X Register)
 - [x] LDY (Load Y Register)
 - [x] STA (Store Accumulator)
-- [ ] STX (Store X Register)
-- [ ] STY (Store Y Register)
+- [x] STX (Store X Register)
+- [x] STY (Store Y Register)
 
 ## Register Transfers
 - [ ] TAX (Transfer Accumulator to X)

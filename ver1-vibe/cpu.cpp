@@ -245,6 +245,31 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 4;
             break;
         }
+        // STY - Store Y Register
+        // Zero Page: STY $NN (84)
+        case 0x84: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            mem.write(zeroPageAddr, Y);
+            currentCycles += 3;
+            break;
+        }
+        // Absolute: STY $NNNN (8C)
+        case 0x8C: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t absoluteAddr = (highByte << 8) | lowByte;
+            mem.write(absoluteAddr, Y);
+            currentCycles += 4;
+            break;
+        }
+        // Zero Page, X: STY $NN,X (94)
+        case 0x94: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            uint8_t address = (zeroPageAddr + X) & 0xFF; // Wrap around for zero page
+            mem.write(address, Y);
+            currentCycles += 4;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
