@@ -970,6 +970,9 @@ int CPU::execute(uint8_t opcode) {
         case 0xF8: setFlag(D); currentCycles += 2; break;   // SED
         case 0x78: setFlag(I); currentCycles += 2; break;   // SEI
 
+        // System Functions
+        case 0xEA: currentCycles += 2; break; // NOP
+
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
