@@ -52,7 +52,8 @@ add_executable(cpu_unit_tests Testing/cpu_test.cpp     Testing/test_lda.cpp
     Testing/test_rol.cpp
     Testing/test_ror.cpp
     Testing/test_jmp.cpp
-    Testing/test_jsr_rts.cpp cpu.cpp memory.cpp)
+    Testing/test_jsr_rts.cpp
+    Testing/test_branches.cpp cpu.cpp memory.cpp)
 target_link_libraries(cpu_unit_tests PRIVATE GTest::gtest_main)
 target_include_directories(cpu_unit_tests PUBLIC .)
 add_test(NAME CPUTests COMMAND cpu_unit_tests)

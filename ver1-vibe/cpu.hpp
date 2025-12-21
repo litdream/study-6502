@@ -47,11 +47,11 @@ public:
     // CPU execution
     void step();
     void reset();
-    int execute(uint8_t opcode);
-
-private:
-    uint32_t currentCycles; // Clock cycles for the current instruction
-
-};
+        int execute(uint8_t opcode);
+    
+    private:
+        void branchIf(bool condition);
+        uint32_t currentCycles; // Clock cycles for the current instruction
+    };
 
 #endif // CPU_HPP

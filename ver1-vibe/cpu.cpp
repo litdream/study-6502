@@ -951,12 +951,34 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 6;
             break;
         }
+        // Branch Instructions
+        case 0x90: branchIf(!getFlag(C)); break; // BCC
+        case 0xB0: branchIf(getFlag(C)); break;  // BCS
+        case 0xF0: branchIf(getFlag(Z)); break;  // BEQ
+        case 0x30: branchIf(getFlag(N)); break;  // BMI
+        case 0xD0: branchIf(!getFlag(Z)); break; // BNE
+        case 0x10: branchIf(!getFlag(N)); break; // BPL
+        case 0x50: branchIf(!getFlag(V)); break; // BVC
+        case 0x70: branchIf(getFlag(V)); break;  // BVS
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
             break;
     }
     return currentCycles;
+}
+
+void CPU::branchIf(bool condition) {
+    currentCycles += 2; // Base cycles for a branch instruction
+    int8_t offset = mem.read(PC++);
+    if (condition) {
+        currentCycles++; // Add a cycle for a successful branch
+        uint16_t oldPC = PC;
+        PC += offset;
+        if ((oldPC & 0xFF00) != (PC & 0xFF00)) {
+            currentCycles++; // Add another cycle for crossing a page boundary
+        }
+    }
 }
 
 void CPU::reset() {
