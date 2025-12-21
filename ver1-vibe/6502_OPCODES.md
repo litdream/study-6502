@@ -19,10 +19,10 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] TYA (Transfer Y to Accumulator)
 
 ## Stack Operations
-- [ ] PHA (Push Accumulator)
-- [ ] PHP (Push Processor Status)
-- [ ] PLA (Pull Accumulator)
-- [ ] PLP (Pull Processor Status)
+- [x] PHA (Push Accumulator)
+- [x] PHP (Push Processor Status)
+- [x] PLA (Pull Accumulator)
+- [x] PLP (Pull Processor Status)
 
 ## Logical
 - [ ] AND (Logical AND)
