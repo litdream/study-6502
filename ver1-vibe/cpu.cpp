@@ -651,6 +651,42 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 2;
             break;
         }
+        // INC - Increment Memory
+        case 0xE6: // Zero Page
+        case 0xF6: // Zero Page,X
+        case 0xEE: // Absolute
+        case 0xFE: // Absolute,X
+        {
+            uint16_t addr;
+            uint8_t cycles;
+
+            if (opcode == 0xE6) { // Zero Page
+                addr = mem.read(PC++);
+                cycles = 5;
+            } else if (opcode == 0xF6) { // Zero Page,X
+                uint8_t zeroPageAddr = mem.read(PC++);
+                addr = (zeroPageAddr + X) & 0xFF; // Wrap around
+                cycles = 6;
+            } else if (opcode == 0xEE) { // Absolute
+                uint8_t lowByte = mem.read(PC++);
+                uint8_t highByte = mem.read(PC++);
+                addr = (highByte << 8) | lowByte;
+                cycles = 6;
+            } else { // 0xFE - Absolute,X
+                uint8_t lowByte = mem.read(PC++);
+                uint8_t highByte = mem.read(PC++);
+                uint16_t baseAddr = (highByte << 8) | lowByte;
+                addr = baseAddr + X;
+                cycles = 7;
+            }
+            
+            uint8_t value = mem.read(addr);
+            value++;
+            mem.write(addr, value);
+            setZNFlags(value);
+            currentCycles += cycles;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
