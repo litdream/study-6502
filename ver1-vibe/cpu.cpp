@@ -126,6 +126,53 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 6;
             break;
         }
+        // LDX - Load X Register
+        // Immediate: LDX #$NN (A2)
+        case 0xA2: {
+            uint8_t value = mem.read(PC++);
+            X = value;
+            setZNFlags(X);
+            currentCycles += 2;
+            break;
+        }
+        // Zero Page: LDX $NN (A6)
+        case 0xA6: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            X = mem.read(zeroPageAddr);
+            setZNFlags(X);
+            currentCycles += 3;
+            break;
+        }
+        // Absolute: LDX $NNNN (AE)
+        case 0xAE: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t absoluteAddr = (highByte << 8) | lowByte;
+            X = mem.read(absoluteAddr);
+            setZNFlags(X);
+            currentCycles += 4;
+            break;
+        }
+        // Zero Page, Y: LDX $NN,Y (B6)
+        case 0xB6: {
+            uint8_t zeroPageAddr = mem.read(PC++);
+            uint8_t address = (zeroPageAddr + Y) & 0xFF; // Wrap around for zero page
+            X = mem.read(address);
+            setZNFlags(X);
+            currentCycles += 4;
+            break;
+        }
+        // Absolute, Y: LDX $NNNN,Y (BE)
+        case 0xBE: {
+            uint8_t lowByte = mem.read(PC++);
+            uint8_t highByte = mem.read(PC++);
+            uint16_t baseAddr = (highByte << 8) | lowByte;
+            uint16_t absoluteAddr = baseAddr + Y;
+            X = mem.read(absoluteAddr);
+            setZNFlags(X);
+            currentCycles += 4; // Add 1 if page crossed, not handled yet
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
