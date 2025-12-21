@@ -474,6 +474,49 @@ int CPU::execute(uint8_t opcode) {
             setZNFlags(A);
             break;
         }
+        // SBC - Subtract with Carry
+        case 0xE9: // Immediate
+        case 0xE5: // Zero Page
+        case 0xED: // Absolute
+        {
+            uint8_t value;
+            if (opcode == 0xE9) {
+                value = mem.read(PC++);
+                currentCycles += 2;
+            } else if (opcode == 0xE5) {
+                uint8_t zeroPageAddr = mem.read(PC++);
+                value = mem.read(zeroPageAddr);
+                currentCycles += 3;
+            } else { // 0xED
+                uint8_t lowByte = mem.read(PC++);
+                uint8_t highByte = mem.read(PC++);
+                uint16_t absoluteAddr = (highByte << 8) | lowByte;
+                value = mem.read(absoluteAddr);
+                currentCycles += 4;
+            }
+
+            // SBC is equivalent to ADC with the operand's bits inverted.
+            value = ~value;
+            uint16_t sum = A + value + (getFlag(C) ? 1 : 0);
+
+            // Set Carry flag (opposite of ADC)
+            if (sum > 0xFF) {
+                setFlag(C);
+            } else {
+                clearFlag(C);
+            }
+
+            // Set Overflow flag
+            if ((~(A ^ value) & (A ^ sum)) & 0x80) {
+                setFlag(V);
+            } else {
+                clearFlag(V);
+            }
+
+            A = sum & 0xFF;
+            setZNFlags(A);
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
