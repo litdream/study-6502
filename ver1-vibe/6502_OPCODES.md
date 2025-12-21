@@ -11,12 +11,12 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] STY (Store Y Register)
 
 ## Register Transfers
-- [ ] TAX (Transfer Accumulator to X)
-- [ ] TAY (Transfer Accumulator to Y)
-- [ ] TSX (Transfer Stack Pointer to X)
-- [ ] TXA (Transfer X to Accumulator)
-- [ ] TXS (Transfer X to Stack Pointer)
-- [ ] TYA (Transfer Y to Accumulator)
+- [x] TAX (Transfer Accumulator to X)
+- [x] TAY (Transfer Accumulator to Y)
+- [x] TSX (Transfer Stack Pointer to X)
+- [x] TXA (Transfer X to Accumulator)
+- [x] TXS (Transfer X to Stack Pointer)
+- [x] TYA (Transfer Y to Accumulator)
 
 ## Stack Operations
 - [ ] PHA (Push Accumulator)
