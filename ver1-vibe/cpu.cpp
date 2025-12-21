@@ -517,6 +517,38 @@ int CPU::execute(uint8_t opcode) {
             setZNFlags(A);
             break;
         }
+        // CMP - Compare Accumulator
+        case 0xC9: // Immediate
+        case 0xC5: // Zero Page
+        case 0xCD: // Absolute
+        {
+            uint8_t value;
+            if (opcode == 0xC9) {
+                value = mem.read(PC++);
+                currentCycles += 2;
+            } else if (opcode == 0xC5) {
+                uint8_t zeroPageAddr = mem.read(PC++);
+                value = mem.read(zeroPageAddr);
+                currentCycles += 3;
+            } else { // 0xCD
+                uint8_t lowByte = mem.read(PC++);
+                uint8_t highByte = mem.read(PC++);
+                uint16_t absoluteAddr = (highByte << 8) | lowByte;
+                value = mem.read(absoluteAddr);
+                currentCycles += 4;
+            }
+
+            uint8_t result = A - value;
+            
+            if (A >= value) {
+                setFlag(C);
+            } else {
+                clearFlag(C);
+            }
+            
+            setZNFlags(result);
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
