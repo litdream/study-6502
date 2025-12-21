@@ -66,13 +66,13 @@ This document tracks the implementation status of all 6502 instruction categorie
 - [x] BVS (Branch if Overflow Set)
 
 ## Status Flag Changes
-- [ ] CLC (Clear Carry)
-- [ ] CLD (Clear Decimal)
-- [ ] CLI (Clear Interrupt Disable)
-- [ ] CLV (Clear Overflow)
-- [ ] SEC (Set Carry)
-- [ ] SED (Set Decimal)
-- [ ] SEI (Set Interrupt Disable)
+- [x] CLC (Clear Carry)
+- [x] CLD (Clear Decimal)
+- [x] CLI (Clear Interrupt Disable)
+- [x] CLV (Clear Overflow)
+- [x] SEC (Set Carry)
+- [x] SED (Set Decimal)
+- [x] SEI (Set Interrupt Disable)
 
 ## System Functions
 - [ ] BRK (Break)

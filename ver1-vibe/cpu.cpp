@@ -960,6 +960,16 @@ int CPU::execute(uint8_t opcode) {
         case 0x10: branchIf(!getFlag(N)); break; // BPL
         case 0x50: branchIf(!getFlag(V)); break; // BVC
         case 0x70: branchIf(getFlag(V)); break;  // BVS
+
+        // Status Flag Changes
+        case 0x18: clearFlag(C); currentCycles += 2; break; // CLC
+        case 0xD8: clearFlag(D); currentCycles += 2; break; // CLD
+        case 0x58: clearFlag(I); currentCycles += 2; break; // CLI
+        case 0xB8: clearFlag(V); currentCycles += 2; break; // CLV
+        case 0x38: setFlag(C); currentCycles += 2; break;   // SEC
+        case 0xF8: setFlag(D); currentCycles += 2; break;   // SED
+        case 0x78: setFlag(I); currentCycles += 2; break;   // SEI
+
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
