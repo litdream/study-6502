@@ -270,6 +270,48 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += 4;
             break;
         }
+        // Register Transfers
+        // TAX - Transfer Accumulator to X (AA)
+        case 0xAA: {
+            X = A;
+            setZNFlags(X);
+            currentCycles += 2;
+            break;
+        }
+        // TAY - Transfer Accumulator to Y (A8)
+        case 0xA8: {
+            Y = A;
+            setZNFlags(Y);
+            currentCycles += 2;
+            break;
+        }
+        // TSX - Transfer Stack Pointer to X (BA)
+        case 0xBA: {
+            X = S;
+            setZNFlags(X);
+            currentCycles += 2;
+            break;
+        }
+        // TXA - Transfer X to Accumulator (8A)
+        case 0x8A: {
+            A = X;
+            setZNFlags(A);
+            currentCycles += 2;
+            break;
+        }
+        // TXS - Transfer X to Stack Pointer (9A)
+        case 0x9A: {
+            S = X;
+            currentCycles += 2;
+            break;
+        }
+        // TYA - Transfer Y to Accumulator (98)
+        case 0x98: {
+            A = Y;
+            setZNFlags(A);
+            currentCycles += 2;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
