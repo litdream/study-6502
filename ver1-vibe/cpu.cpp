@@ -687,6 +687,20 @@ int CPU::execute(uint8_t opcode) {
             currentCycles += cycles;
             break;
         }
+        // INX - Increment X Register (E8)
+        case 0xE8: {
+            X++;
+            setZNFlags(X);
+            currentCycles += 2;
+            break;
+        }
+        // INY - Increment Y Register (C8)
+        case 0xC8: {
+            Y++;
+            setZNFlags(Y);
+            currentCycles += 2;
+            break;
+        }
         default:
             std::cout << "Unknown opcode: 0x" << std::hex << (int)opcode << std::endl;
             currentCycles += 0; // Unknown opcode, assume 0 cycles or handle as an error
