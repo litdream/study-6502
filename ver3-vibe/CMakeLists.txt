@@ -35,3 +35,18 @@ foreach(ROM_FILE ${ROM_FILES})
         ${CMAKE_CURRENT_BINARY_DIR}
     )
 endforeach()
+
+# Google Test with FetchContent
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/refs/tags/v1.17.0.zip
+)
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+# Unit tests for CPU
+add_executable(cpu_unit_tests Testing/cpu_test.cpp cpu.cpp memory.cpp)
+target_link_libraries(cpu_unit_tests PRIVATE GTest::gtest_main)
+add_test(NAME CPUTests COMMAND cpu_unit_tests)

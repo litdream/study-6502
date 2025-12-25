@@ -37,3 +37,7 @@ a.out
 *#
 .DS_Store
 ._.DS_Store
+
+# Lazy!  Copy from apple-win project, but don't add to my project
+AppleWin
+*/build/
