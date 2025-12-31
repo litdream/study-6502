@@ -14,3 +14,8 @@ Reference Impl:
 
 Test files:
 - https://www.virtualapple.org/
+
+
+My Apple //+ does not boot.  (ver3-vibe)
+Learn this guy's debug method:  https://www.youtube.com/watch?v=dtsKxmBKUJM
+
