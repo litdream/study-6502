@@ -18,4 +18,6 @@ Test files:
 
 My Apple //+ does not boot.  (ver3-vibe)
 Learn this guy's debug method:  https://www.youtube.com/watch?v=dtsKxmBKUJM
+  - His Github:
+    - https://github.com/bitwitch/nes-emulator
 
