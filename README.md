@@ -1,6 +1,10 @@
 # study-6502
 Study 6502 CPU
 
+Learn this guy, too:  CPU only, but readable:
+- https://www.youtube.com/watch?v=qJgsuQoy9bc
+
+
 Reference Impl:
 - linapple:  https://github.com/linappleii/linapple/tree/master
   - linapple sdl2 branch by a user:
