@@ -9,6 +9,7 @@ Reference Impl:
 - linapple:  https://github.com/linappleii/linapple/tree/master
   - linapple sdl2 branch by a user:
     - https://github.com/trngaje/linapple/tree/sdl2
+      - git clone https://github.com/trngaje/linapple.git
 
 - AppleWin:  https://github.com/AppleWin/AppleWin
 
