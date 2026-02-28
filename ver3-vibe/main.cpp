@@ -83,7 +83,9 @@ int main(int argc, char* args[]) {
     }
 
     Memory mem;
-    if (!mem.loadROM("Apple2_Plus.rom", 0xD000)) {
+
+    // 1. Load Rom
+    if ( !mem.loadROM("Apple2_Plus.rom", 0xD000)) {
         TTF_CloseFont(font);
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
@@ -91,7 +93,14 @@ int main(int argc, char* args[]) {
         SDL_Quit();
         return 1;
     }
+    // 2. Reset Vector
+    mem.write(0xFFFC, 0xA6);
+    mem.write(0xFFFD, 0xFA);
 
+    // 3. Reset Keyboard:  To unpress keyboard at beginning.
+    uint8_t dummy = mem.read(0xC000);
+    mem.write(0xC010, 0);
+    
     CPU cpu(mem);
 
     bool quit = false;
